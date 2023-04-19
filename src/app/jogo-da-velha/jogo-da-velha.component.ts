@@ -8,7 +8,7 @@ import { JogoDaVelhaService } from './shared';
 })
 export class JogoDaVelhaComponent implements OnInit{
   
-  constructor(private jogoDaVelhaService: JogoDaVelhaService){}
+  constructor(public jogoDaVelhaService: JogoDaVelhaService){}
 
   ngOnInit(): void {
       this.jogoDaVelhaService.inicializar();
@@ -55,7 +55,7 @@ export class JogoDaVelhaComponent implements OnInit{
    * @returns void
    */
 
-  jogar(posX: number, posY: number): void {
+  jogar(posX: number, posY: number): any {
     this.jogoDaVelhaService.jogar(posX, posY);
   }
 

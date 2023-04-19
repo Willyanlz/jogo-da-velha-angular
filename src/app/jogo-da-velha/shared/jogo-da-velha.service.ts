@@ -19,6 +19,8 @@ export class JogoDaVelhaService {
   private _showInicio: boolean; 
   private _showTabuleiro: boolean;
   private _showFinal: boolean;
+  public pontuacaoJogadorX: number = 0;
+  public pontuacaoJogadorO: number = 0;
 
 
 
@@ -112,7 +114,7 @@ export class JogoDaVelhaService {
   * @returns void
   */
 
-  jogar(posX: number, posY: number): void {
+  jogar(posX: number, posY: number): any {
   
     // jogada inválida
     if (this.tabuleiro[posX][posY] !== this.VAZIO || this.vitoria) {
@@ -131,7 +133,15 @@ export class JogoDaVelhaService {
     // vitoria
     if (this.vitoria !== false) {
       this._showFinal = true;
+      if (this._jogador == 2) {
+        this.pontuacaoJogadorX++;
+      } 
+      if(this._jogador == 1){
+        this.pontuacaoJogadorO++;
+      }
+      console.log(this.pontuacaoJogadorX, this.pontuacaoJogadorO);
     }
+
 
     // empate
     if (!this.vitoria && this.numMovimentos === 9) {
@@ -155,28 +165,33 @@ export class JogoDaVelhaService {
     
     //verifica se linha é válida
     if(tabuleiro[linha][0] === jogador && tabuleiro[linha][1] === jogador && tabuleiro[linha][2] === jogador){
-      fim = [[linha, 0], [linha, 1], [linha, 2]]; 
+      fim = [[linha, 0], [linha, 1], [linha, 2]];
+
     }
 
     //verifica se coluna é válida
     if (tabuleiro[0][coluna] === jogador && tabuleiro[1][coluna] === jogador && tabuleiro[2][coluna] === jogador) {
       fim = [[0, coluna], [1, coluna], [2, coluna]];
+
     }
 
     //verifica as diagonais
     if(tabuleiro[0][0] === jogador && tabuleiro[1][1] === jogador && tabuleiro[2][2] === jogador){
-      fim = [[0, 0], [1, 1], [2, 2]] 
+      fim = [[0, 0], [1, 1], [2, 2]];
+
     }
 
     if(tabuleiro[0][2] === jogador && tabuleiro[1][1] === jogador && tabuleiro[2][0] === jogador){
-      fim = [[0, 2], [1, 1], [2, 0]] 
+      fim = [[0, 2], [1, 1], [2, 0]];
+
     }
+
     return fim;
   }
 
   cpuJogar(): void{
 
-    // verifica jogada de vitória
+    // verifica jogada de possivel vitória
     let jogada: number[] = this.obterJogada(this.O);
 
     if(jogada.length <= 0) {
@@ -215,12 +230,14 @@ export class JogoDaVelhaService {
    */
 
   obterJogada(jogador: number): number[]{
+    
     let tab = this.tabuleiro;
     for (let lin = 0; lin < this.TAM_TAB; lin++) {
       for (let col = 0; col < this.TAM_TAB; col++) {
         if (tab[lin][col] !== this.VAZIO) {
           continue;
         }
+        // debugger;
         tab[lin][col] = jogador;
         if (this.fimJogo(lin, col, tab, jogador)){
           return [lin, col];
